@@ -33,14 +33,14 @@ const Home = ({navigation}) => {
         style={{flex: 1}}
         source={backgroundImage}
         resizeMode="cover">
-        <View style={{flex:1,backgroundColor:'rgba(0,0,0,0.4)'}}>
+        <View style={{flex: 1, backgroundColor: 'rgba(0,0,0,0.4)'}}>
           <View style={styles.headerContent}>
             <Text
               style={[
                 styles.header,
                 {top: orientation == 'portrait' ? 280 : 100},
               ]}>
-              WEDDING EVENT NAME
+              WEDDING EVENT
             </Text>
           </View>
           <View style={styles.buttonSection}>
