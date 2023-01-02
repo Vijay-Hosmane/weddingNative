@@ -12,16 +12,19 @@ import {
   ImageBackground,
 } from 'react-native';
 import React, {createRef, useEffect, useRef, useState} from 'react';
-import {back, Home, play} from '../assets/Index';
+import {back, Home, play, black} from '../assets/Index';
 const PhotosDisplay = ({route, navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [timeout, settimeout] = useState(false);
   const [current, setCurrent] = useState();
   const [slideShow, setSlideShow] = useState(false);
+  const [temp, setTemp] = useState(0);
+  const [photosDisplay, setPhotosDisplay] = useState(false);
   const {data} = route.params;
   const videoRef = createRef();
   let {width: ScreenWidth, height: Screenheight} = Dimensions.get('window');
-
+  const {w} = Dimensions.get('window');
+  const h = w * 1;
   const handleSlideShow = ele => {
     setSlideShow(true);
     console.log(data.photos.length);
@@ -40,6 +43,31 @@ const PhotosDisplay = ({route, navigation}) => {
       setSlideShow(false);
     }
   }, [slideShow == true && timeout]);
+
+  const handleChange = ({nativeEvent}) => {
+    let slide;
+    if (temp == 1) {
+      slide = (900 * current) / 900;
+      nativeEvent.contentOffset.x = nativeEvent.contentOffset.x + 900 * current;
+      setCurrent(slide);
+      setTemp(0);
+    }
+
+    if (temp == 0) {
+      slide = Math.ceil(
+        nativeEvent.contentOffset.x / nativeEvent.layoutMeasurement.width,
+      );
+      setCurrent(slide);
+    }
+
+    console.log(
+      'slide',
+      nativeEvent.contentOffset.x,
+      nativeEvent.layoutMeasurement.width,
+    );
+  };
+  // console.log('Start', slide);
+  console.log('current', current);
   return (
     <View>
       <FlatList
@@ -58,7 +86,10 @@ const PhotosDisplay = ({route, navigation}) => {
               }}>
               <TouchableOpacity
                 onPress={() => {
-                  setModalVisible(true), setCurrent(index);
+                  setModalVisible(true),
+                    setCurrent(index),
+                    setPhotosDisplay(true);
+                  setTemp(1);
                 }}>
                 <Image
                   style={[
@@ -75,72 +106,74 @@ const PhotosDisplay = ({route, navigation}) => {
                 visible={modalVisible}
                 onRequestClose={() => {}}>
                 <View style={{flex: 1, backgroundColor: '#000'}}>
-                  <View></View>
-                  {data.photos.map((ele, pos) => {
-                    return (
-                      <>
-                        {pos == current && (
-                          <View style={{}} key={pos.toString()}>
-                            <ImageBackground
-                              style={{
-                                width: ScreenWidth,
-                                height: Screenheight - 100,
-                              }}
-                              source={ele}
-                              resizeMode="cover">
-                              <View
-                                style={{
-                                  position: 'absolute',
-                                  top: 0,
-                                  width: '100%',
-                                }}>
-                                <View style={styles.headerSection}>
-                                  <TouchableOpacity
-                                    style={styles.button}
-                                    onPress={() => {
-                                      setModalVisible(false);
-                                    }}>
-                                    <Image
-                                      source={back}
-                                      style={styles.topImage}></Image>
-                                  </TouchableOpacity>
-                                  <Text style={styles.header}>RECEPTION</Text>
-                                  <TouchableOpacity
-                                    style={styles.button}
-                                    onPress={() => {
-                                      navigation.navigate('Home'),
-                                        setModalVisible(false);
-                                    }}>
-                                    <Image
-                                      source={Home}
-                                      style={styles.topImage}></Image>
-                                  </TouchableOpacity>
-                                </View>
-                              </View>
-                              <View
-                                style={{
-                                  position: 'absolute',
-                                  bottom: 0,
-                                  left: 0,
-                                  width: '100%',
-                                }}>
-                                <View style={styles.headerSection}>
-                                  <TouchableOpacity
-                                    style={styles.button}
-                                    onPress={() => handleSlideShow(ele)}>
-                                    <Image
-                                      style={styles.topImage}
-                                      source={play}
-                                    />
-                                  </TouchableOpacity>
-                                </View>
-                              </View>
-                            </ImageBackground>
-                          </View>
-                        )}
-                      </>
-                    );
-                  })}
+                  <ScrollView
+                    horizontal
+                    contentOffset={(x = current)}
+                    showsHorizontalScrollIndicator={true}
+                    onScroll={handleChange}
+                    pagingEnabled
+                    style={{flex: 1}}>
+                    {data.photos.map((ele, pos) => {
+                      return pos == current ? (
+                        <Image
+                          key={pos}
+                          source={ele}
+                          style={{
+                            width: ScreenWidth,
+                            height: Screenheight - 50,
+                          }}
+                        />
+                      ) : (
+                        <Image
+                          key={pos}
+                          source={data.photos[current]}
+                          style={{
+                            width: ScreenWidth,
+                            height: Screenheight - 50,
+                          }}
+                        />
+                      );
+                    })}
+                  </ScrollView>
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: 0,
+                      width: ScreenWidth,
+                    }}>
+                    <View style={styles.headerSection}>
+                      <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => {
+                          setModalVisible(false);
+                        }}>
+                        <Image source={back} style={styles.topImage}></Image>
+                      </TouchableOpacity>
+                      <Text style={styles.header}>RECEPTION</Text>
+                      <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => {
+                          navigation.navigate('Home'), setModalVisible(false);
+                        }}>
+                        <Image source={Home} style={styles.topImage}></Image>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      position: 'absolute',
+                      bottom: 0,
+                      left: 0,
+                      width: ScreenWidth,
+                    }}>
+                    <View style={styles.headerSection}>
+                      <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => handleSlideShow(ele)}>
+                        <Image style={styles.topImage} source={play} />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
                 </View>
               </Modal>
             </View>

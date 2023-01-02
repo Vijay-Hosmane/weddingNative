@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   Button,
   Dimensions,
@@ -50,20 +51,6 @@ const Home = ({navigation}) => {
               <Text style={styles.buttonText}>PHOTOS</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              // style={({pressed}) => ({
-              //   // backgroundColor: pressed
-              //   //   ? 'rgba(255, 255, 255, 0.5)'
-              //   //   : 'rgba(255, 255, 255, 0.05)',
-              //   opacity: pressed ? 0.2 : 1,
-              //   borderWidth: 5,
-              //   borderColor: '#fff',
-              //   display: 'flex',
-              //   justifyContent: 'center',
-              //   alignItems: 'center',
-              //   width: 250,
-              //   height: 100,
-              //   margin: 20,
-              // })}
               onPress={() => setVideosActive(true)}
               style={styles.button}>
               <Text style={styles.buttonText}>VIDEOS</Text>

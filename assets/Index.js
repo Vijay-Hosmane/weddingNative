@@ -14,7 +14,7 @@ import wedding2 from '../assets/wedding2.jpeg';
 import wedding3 from '../assets/wedding3.jpg';
 import wedding4 from '../assets/wedding4.jpeg';
 import wedding5 from '../assets/wedding5.jpg';
-
+import black from '../assets/black.webp';
 import t1 from '../assets/t1.png';
 import t2 from '../assets/t2.png';
 import t3 from '../assets/t3.png';
@@ -29,6 +29,7 @@ import vid5 from '../assets/vid5.mp4';
 import vid6 from '../assets/v6.mp4';
 import videosDisplayBackground from '../assets/videosDisplayBackground.jpeg';
 export {
+  black,
   vid1,
   vid2,
   vid3,
